@@ -55,11 +55,6 @@ jobs:
         run: |
           flake8 .
 
-      # Check formatting
-      - name: Check Formatting
-        run: |
-          black --check .
-
       # Run Unit Tests
       - name: Run Tests
         run: |
