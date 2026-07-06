@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import ast
 import operator
-from typing import Any
 
 
 def add(a: float, b: float) -> float:
