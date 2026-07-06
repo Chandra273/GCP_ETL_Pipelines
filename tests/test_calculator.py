@@ -1,10 +1,11 @@
 import pytest
 
 from src.calculator import add, divide, evaluate, multiply, power, subtract
+from src.constants import result_for_add, test_to_add
 
 
 def test_add():
-    assert add(2, 3) == 5
+    assert add(*test_to_add) == result_for_add
 
 
 def test_subtract():
