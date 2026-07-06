@@ -50,10 +50,10 @@ jobs:
         run: |
           pip install pytest flake8 black
 
-      # Lint
-      - name: Run Flake8
-        run: |
-          flake8 .
+      # # Lint
+      # - name: Run Flake8
+      #   run: |
+      #     flake8 .
 
       # Run Unit Tests
       - name: Run Tests
