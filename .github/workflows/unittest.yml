@@ -1,1 +1,80 @@
-name: asdfghj
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Cache pip packages
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Install development dependencies (optional)
+      - name: Install Dev Tools
+        run: |
+          pip install pytest flake8 black
+
+      # Lint
+      - name: Run Flake8
+        run: |
+          flake8 .
+
+      # Check formatting
+      - name: Check Formatting
+        run: |
+          black --check .
+
+      # Run Unit Tests
+      - name: Run Tests
+        run: |
+          pytest
+
+      # Build package (optional)
+      - name: Build Package
+        run: |
+          python -m pip install build
+          python -m build
+
+      # Upload build artifacts
+      - name: Upload Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package
+          path: dist/
